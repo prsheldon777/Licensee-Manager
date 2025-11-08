@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Privacy Policy";
+}
+<h1>@ViewData["Title"]</h1>
+
+@{
+    ViewData["Title"] = "Privacy";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Privacy & Data Usage</h1>
+
+<p class="text-muted">
+    This application is a demonstration system for managing licensees, offices, and audit history.
+    It is intended for evaluation and training purposes only and is not a production application.
+</p>
+
+<h3>What data does this application handle?</h3>
+<p>
+    The application is designed to work with the following types of data:
+</p>
+<ul>
+    <li><strong>Licensee information</strong> – names, email addresses, license numbers, license types, status, and expiration dates.</li>
+    <li><strong>Office information</strong> – office names, locations, and identifiers.</li>
+    <li><strong>Audit log entries</strong> – records of changes to licensee status for traceability.</li>
+</ul>
+
+<h3>How is the data used?</h3>
+<p>
+    All data displayed in this application is used solely to:
+</p>
+<ul>
+    <li>Demonstrate CRUD (Create, Read, Update, Delete) operations,</li>
+    <li>Show how licensee and office relationships can be managed,</li>
+    <li>Illustrate audit logging of status changes and record updates.</li>
+</ul>
+<p>
+    In a real environment, this type of data would typically be limited to authorized staff and used only
+    to support internal business operations and regulatory compliance.
+</p>
+
+<h3>Demo data and test environment</h3>
+<p>
+    The data used in this instance of the application is sample or test data only.
+    It is not intended to represent real individuals or real organizations, and it should not be treated as
+    production or customer data.
+</p>
+
+<h3>Access and security</h3>
+<p>
+    This project is intended to run in a local or controlled development environment.
+    Access to the application and its database is limited to the person or team evaluating the code.
+    No external authentication, encryption, or production-grade security controls have been enabled,
+    as the focus of this project is on demonstrating architecture, data modeling, and application features.
+</p>
+
+<h3>Your responsibilities if reused</h3>
+<p>
+    If this application or its code is adapted for real-world use, it is the responsibility of the deploying
+    organization to:
+</p>
+<ul>
+    <li>Implement appropriate authentication and authorization,</li>
+    <li>Secure database access and connections,</li>
+    <li>Comply with all applicable privacy, security, and data protection regulations,</li>
+    <li>Provide users with clear and accurate privacy and data-handling information.</li>
+</ul>
+
+<h3>Contact</h3>
+<p>
+    For questions about this demonstration project or its data handling, please contact the developer
+    of this application.
+</p>

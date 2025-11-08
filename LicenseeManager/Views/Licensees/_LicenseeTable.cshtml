@@ -1,0 +1,63 @@
+﻿@model IEnumerable<LicenseeManager.Models.Licensee>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th><a href="#" class="sort-link" data-sort="FirstName">First Name</a></th>
+            <th><a href="#" class="sort-link" data-sort="LastName">Last Name</a></th>
+            <th><a href="#" class="sort-link" data-sort="Email">Email</a></th>
+            <th><a href="#" class="sort-link" data-sort="LicenseNumber">License #</a></th>
+            <th><a href="#" class="sort-link" data-sort="status">Status</a></th>
+            <th><a href="#" class="sort-link" data-sort="IssueDate">Issued</a></th>
+            <th><a href="#" class="sort-link" data-sort="ExpirationDate">Expires</a></th>
+            <th><a href="#" class="sort-link" data-sort="CreatedAt">Created</a></th>
+            <th><a href="#" class="sort-link" data-sort="UpdatedAt">Updated</a></th>
+            <th><a href="#" class="sort-link" data-sort="LicenseType">License Type</a></th>
+            <th><a href="#" class="sort-link" data-sort="Office">Office</a></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LicenseNumber)
+                </td>
+                <td>@item.Status.ToString()</td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IssueDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ExpirationDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CreatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UpdatedAt)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LicenseType.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Office.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.LicenseeID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.LicenseeID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.LicenseeID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

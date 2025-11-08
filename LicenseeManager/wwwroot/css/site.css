@@ -1,0 +1,218 @@
+/* --- GLOBAL STYLES --- */
+body {
+    background-color: #f8f9fa; /* light gray */
+    font-family: "Segoe UI", Roboto, sans-serif;
+    color: #212529;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 600;
+}
+
+/* Page title */
+h1 {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+    color: #343a40;
+    border-bottom: 2px solid #ffc107; /* gold accent */
+    display: inline-block;
+    padding-bottom: 0.25rem;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: #ffc107;
+    border-color: #e0a800;
+    color: #212529;
+}
+
+    .btn-primary:hover {
+        background-color: #e0a800;
+        color: #fff;
+    }
+
+/* Tables */
+.table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0 8px rgba(0,0,0,0.05);
+}
+
+    .table thead {
+        background-color: #343a40;
+        color: white;
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #fdfdfd;
+    }
+
+    .table tbody tr:hover {
+        background-color: #fff8e1;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+/* Sort arrows */
+.sort-link {
+    color: white;
+    text-decoration: none;
+}
+
+    .sort-link:hover {
+        text-decoration: underline;
+    }
+
+    .sort-link::after {
+        content: "⇅";
+        font-size: 0.8em;
+        opacity: 0.6;
+        margin-left: 4px;
+    }
+
+    .sort-link.active.asc::after {
+        content: "▲";
+        opacity: 1;
+    }
+
+    .sort-link.active.desc::after {
+        content: "▼";
+        opacity: 1;
+    }
+
+/* Forms */
+.form-control, select.form-control {
+    border-radius: 0.4rem;
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+    .form-control:focus {
+        border-color: #ffc107;
+        box-shadow: 0 0 0 0.2rem rgba(255,193,7,0.25);
+    }
+
+/* Cards / containers */
+.container, .row {
+    margin-bottom: 1.5rem;
+}
+
+.nav-link.active {
+    font-weight: 600;
+    color: #ffc107 !important; /* gold highlight */
+    border-bottom: 2px solid #ffc107;
+}
+
+.card-header {
+    font-size: 1.1rem;
+}
+
+.table-sm td, .table-sm th {
+    vertical-align: middle;
+}
+
+.table-danger th,
+.table-danger td,
+.table-warning th,
+.table-warning td {
+    color: #000 !important;
+}
+
+/* === Dashboard (Home Page) Styling === */
+.dashboard-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.2s ease-in-out;
+    background-color: #f8f9fa; /* light neutral base */
+    color: #212529;
+}
+
+    .dashboard-card:hover {
+        transform: scale(1.01);
+    }
+
+    .dashboard-card .card-header {
+        font-weight: bold;
+    }
+
+/* Softer "dark" accents for tables (graphite tone, not black) */
+.table-muted {
+    background-color: #e9ecef !important;
+    color: #212529 !important;
+}
+
+.table-slight-dark {
+    background-color: #f2f2f2;
+}
+
+.table-slight-dark tbody tr:hover {
+    background-color: #e1e1e1 !important;
+}
+
+.table-slight-dark th {
+    background-color: #dee2e6;
+    color: #212529;
+    border-bottom: 2px solid #bfbfbf;
+}
+
+/* Header color variants */
+.table-header-red th {
+    background-color: #ff4d4d !important;
+    color: #fff !important;
+    border: none;
+}
+
+.table-header-yellow th {
+    background-color: #ffd84d !important;
+    color: #000 !important;
+    border: none;
+}
+
+/* Buttons */
+.btn-outline-danger {
+    color: #c82333;
+    border-color: #c82333;
+}
+
+.btn-outline-danger:hover {
+    background-color: #c82333;
+    color: #fff;
+}
+
+.btn-outline-warning {
+    color: #e0a800;
+    border-color: #e0a800;
+}
+
+.btn-outline-warning:hover {
+    background-color: #ffc107;
+    color: #000;
+}
+
+/* === Dashboard Badge Styling === */
+.badge-expired {
+    background-color: #f8d7da; /* light red tone */
+    color: #721c24; /* deep crimson text */
+    border: 1px solid #f5c6cb;
+    font-weight: 600;
+    padding: 0.45em 0.75em;
+    border-radius: 0.5rem;
+}
+
+.badge-expiring {
+    background-color: #fff3cd; /* soft gold tone */
+    color: #7a5b00; /* warm amber text */
+    border: 1px solid #ffe8a1;
+    font-weight: 600;
+    padding: 0.45em 0.75em;
+    border-radius: 0.5rem;
+}
+
+/* Subtle hover for badges in headers */
+.card-header .badge:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s ease-in-out;
+}

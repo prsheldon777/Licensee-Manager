@@ -1,0 +1,128 @@
+﻿@using LicenseeManager.Models
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var expired = ViewBag.ExpiredLicensees as List<LicenseeManager.Models.Licensee>;
+    var expiringSoon = ViewBag.ExpiringSoonLicensees as List<LicenseeManager.Models.Licensee>;
+
+    int daysAhead = ViewBag.DaysAhead ?? 30;
+    var expiredCount = expired?.Count ?? 0;
+    var expiringCount = expiringSoon?.Count ?? 0;
+}
+
+<div class="container mt-4">
+    <h1 class="mb-3 text-center fw-bold">Licensee Dashboard</h1>
+
+    <div class="row mb-4">
+        <div class="col-md-6 offset-md-3">
+            <form method="get" class="d-flex align-items-center justify-content-center gap-2">
+                <label for="daysAhead" class="me-2 fw-semibold">Show licenses expiring in the next</label>
+                <select id="daysAhead" name="daysAhead" class="form-select w-auto"
+                        onchange="this.form.submit()">
+                    <option value="7"  selected="@(daysAhead == 7 ? "selected" : null)">7 days</option>
+                    <option value="30" selected="@(daysAhead == 30 ? "selected" : null)">30 days</option>
+                    <option value="60" selected="@(daysAhead == 60 ? "selected" : null)">60 days</option>
+                    <option value="90" selected="@(daysAhead == 90 ? "selected" : null)">90 days</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Expired Licenses -->
+        <div class="col-md-6 mb-4">
+            <div class="card dashboard-card border-danger shadow">
+                <div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+                    <span>Expired Licenses</span>
+                    <span class="badge badge-expired">@expiredCount expired</span>
+                </div>
+                <div class="card-body">
+                    @if (expired != null && expired.Any())
+                    {
+                        <table class="table table-slight-dark table-hover table-striped align-middle mb-0">
+                            <thead class="table-header-red">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>License Type</th>
+                                    <th>Expired On</th>
+                                    <th>Office</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in expired)
+                                {
+                                    <tr>
+                                        <td>@item.FullName</td>
+                                        <td>@item.LicenseType?.Name</td>
+                                        <td>@(item.ExpirationDate?.ToShortDateString() ?? "")</td>
+                                        <td>@item.Office?.Name</td>
+                                        <td>
+                                            <a asp-controller="Licensees" asp-action="Edit" asp-route-id="@item.LicenseeID"
+                                               class="btn btn-sm btn-outline-danger fw-bold">
+                                                Renew
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No expired licenses</p>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Expiring Soon -->
+        <div class="col-md-6 mb-4">
+            <div class="card dashboard-card border-warning shadow">
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                    <span>Licenses Expiring Soon (Next @daysAhead Days)</span>
+                    <span class="badge badge-expiring">@expiringCount expiring soon</span>
+                </div>
+                <div class="card-body">
+                    @if (expiringSoon != null && expiringSoon.Any())
+                    {
+                        <table class="table table-slight-dark table-hover table-striped align-middle mb-0">
+                            <thead class="table-header-yellow">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>License Type</th>
+                                    <th>Expires On</th>
+                                    <th>Office</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in expiringSoon)
+                                {
+                                    <tr>
+                                        <td>@item.FullName</td>
+                                        <td>@item.LicenseType?.Name</td>
+                                        <td>@(item.ExpirationDate?.ToShortDateString() ?? "")</td>
+                                        <td>@item.Office?.Name</td>
+                                        <td>
+                                            <a asp-controller="Licensees" asp-action="Edit" asp-route-id="@item.LicenseeID"
+                                               class="btn btn-sm btn-outline-warning fw-bold text-warning border-warning">
+                                                Renew
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No upcoming expirations</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

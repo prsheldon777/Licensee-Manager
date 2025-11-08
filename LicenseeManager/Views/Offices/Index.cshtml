@@ -1,0 +1,123 @@
+﻿@model IEnumerable<LicenseeManager.Models.Office>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<div class="row mb-3">
+    <div class="col-md-4">
+        <input id="searchBox" class="form-control" placeholder="Search by first or last name..." />
+    </div>
+    <div class="col-md-2">
+        <button id="searchButton" class="btn btn-secondary w-100">Search</button>
+    </div>
+    <div class="col-md-2">
+        <button id="clearButton" class="btn btn-outline-secondary w-100">Clear</button>
+    </div>
+</div>
+
+<div id="OfficeTableContainer">
+    @Html.Partial("_OfficeTable", Model)
+</div>
+
+@section Scripts {
+    <script>
+        function attachRowBehaviors() {
+            // Row hover highlight
+            document.querySelectorAll("#OfficeTableContainer table tbody tr").forEach(row => {
+                row.addEventListener("mouseenter", () => row.style.backgroundColor = "#ffffcc");
+                row.addEventListener("mouseleave", () => row.style.backgroundColor = "");
+            });
+
+            // Confirm delete
+            document.querySelectorAll("#OfficeTableContainer a.delete-link").forEach(link => {
+                link.addEventListener("click", function (e) {
+                    if (!confirm("Are you sure you want to delete this Office?")) {
+                        e.preventDefault();
+                    }
+                });
+            });
+        }
+
+        // Initial attach
+        attachRowBehaviors();
+
+        document.getElementById("searchButton").addEventListener("click", function () {
+            const term = document.getElementById("searchBox").value;
+
+            fetch('@Url.Action("Search", "Offices")?term=' + encodeURIComponent(term))
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("OfficeTableContainer").innerHTML = html;
+                    attachRowBehaviors(); // reattach events for new rows
+                })
+                .catch(error => console.error("Search error:", error));
+        });
+
+        document.getElementById("clearButton").addEventListener("click", function () {
+            document.getElementById("searchBox").value = "";
+
+            fetch('@Url.Action("Search", "Offices")')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById("OfficeTableContainer").innerHTML = html;
+                    attachRowBehaviors();
+                })
+                .catch(error => console.error("Clear error:", error));
+        });
+
+        // Optional: trigger search on Enter key
+        document.getElementById("searchBox").addEventListener("keyup", function (e) {
+            if (e.key === "Enter") {
+                document.getElementById("searchButton").click();
+            }
+        });
+
+        let currentSort = { sortBy: "", sortOrder: "asc" };
+
+        document.addEventListener("click", function (e) {
+            if (e.target.classList.contains("sort-link")) {
+                e.preventDefault();
+
+                const sortBy = e.target.dataset.sort;
+
+                // Flip sort order if clicking the same column again
+                if (currentSort.sortBy === sortBy) {
+                    currentSort.sortOrder = currentSort.sortOrder === "asc" ? "desc" : "asc";
+                } else {
+                    currentSort.sortBy = sortBy;
+                    currentSort.sortOrder = "asc";
+                }
+
+                const term = document.getElementById("searchBox").value;
+
+                fetch(`@Url.Action("Search", "Offices")?term=${encodeURIComponent(term)}&sortBy=${sortBy}&sortOrder=${currentSort.sortOrder}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        document.getElementById("OfficeTableContainer").innerHTML = html;
+                        attachRowBehaviors();
+
+                        // 🔽 Update arrow indicators after table reload
+                        document.querySelectorAll(".sort-link").forEach(link => {
+                            link.classList.remove("active", "asc", "desc");
+                        });
+
+                        const activeLink = document.querySelector(`.sort-link[data-sort='${currentSort.sortBy}']`);
+                        if (activeLink) {
+                            activeLink.classList.add("active", currentSort.sortOrder);
+                        }
+                    })
+                    .catch(error => console.error("Sort error:", error));
+            }
+        });
+
+    </script>
+}
