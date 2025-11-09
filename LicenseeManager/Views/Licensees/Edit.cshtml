@@ -54,9 +54,9 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Status" class="form-label fw-semibold"></label>
-                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<LicenseeStatus>()"></select>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.StatusList" id="Status"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
 
@@ -99,5 +99,24 @@
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        
     }
+
+    <script>
+         $(document).ready(function () {
+            $('form').on('submit', function (e) {
+                const statusSelect = $('#Status');
+                const statusText = statusSelect.find('option:selected').text();
+                const validationSpan = statusSelect.closest('.form-group').find('.text-danger');
+
+                // Clear any old messages
+                validationSpan.text('');
+
+                if (statusText === 'Expired') {
+                    e.preventDefault();
+                    validationSpan.text('A licensee cannot be saved with an expired status. Please renew their license or mark them as inactive instead.');
+                }
+            });
+        });
+    </script>
 }

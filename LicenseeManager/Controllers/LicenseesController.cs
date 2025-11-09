@@ -76,8 +76,19 @@ namespace LicenseeManager.Controllers
                     .Where(o => o.Active)
                     .ToListAsync();
 
+                var statusOptions = Enum.GetValues(typeof(LicenseeStatus))
+                    .Cast<LicenseeStatus>()
+                    .Where(s => s != LicenseeStatus.Expired) // exclude Expired for creation
+                    .Select(s => new SelectListItem
+                    {
+                        Value = ((int)s).ToString(),
+                        Text = s.ToString()
+                    })
+                    .ToList();
+
                 ViewData["LicenseTypeID"] = new SelectList(_context.LicenseType, "LicenseTypeID", "Name");
                 ViewData["OfficeID"] = new SelectList(activeOffices, "OfficeID", "Name");
+                ViewData["StatusList"] = new SelectList(statusOptions, "Value", "Text");
                 return View();
             }
             catch (Exception ex)
@@ -111,8 +122,28 @@ namespace LicenseeManager.Controllers
             try
             {
                 var activeOffices = await _context.Offices.Where(o => o.Active).ToListAsync();
+
+                // Build the status dropdown logic
+                var statuses = Enum.GetValues(typeof(LicenseeStatus))
+                    .Cast<LicenseeStatus>()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = ((int)s).ToString(),
+                        Text = s.ToString()
+                    })
+                    .ToList();
+
+                // If NOT expired, remove "Expired" from the dropdown
+                if (licensee.Status != LicenseeStatus.Expired)
+                {
+                    statuses = statuses
+                        .Where(s => s.Text != LicenseeStatus.Expired.ToString())
+                        .ToList();
+                }
+
                 ViewData["LicenseTypeID"] = new SelectList(_context.LicenseType, "LicenseTypeID", "Name", licensee.LicenseTypeID);
                 ViewData["OfficeID"] = new SelectList(activeOffices, "OfficeID", "Name", licensee.OfficeID);
+                ViewData["StatusList"] = new SelectList(statuses, "Value", "Text", ((int)licensee.Status).ToString());
                 return View(licensee);
             }
             catch (Exception ex)
@@ -140,8 +171,27 @@ namespace LicenseeManager.Controllers
 
                 var activeOffices = await _context.Offices.Where(o => o.Active).ToListAsync();
 
+                // Build the status dropdown logic
+                var statuses = Enum.GetValues(typeof(LicenseeStatus))
+                    .Cast<LicenseeStatus>()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = ((int)s).ToString(),
+                        Text = s.ToString()
+                    })
+                    .ToList();
+
+                // If NOT expired, remove "Expired" from the dropdown
+                if (licensee.Status != LicenseeStatus.Expired)
+                {
+                    statuses = statuses
+                        .Where(s => s.Text != LicenseeStatus.Expired.ToString())
+                        .ToList();
+                }
+
                 ViewData["LicenseTypeID"] = new SelectList(_context.LicenseType, "LicenseTypeID", "Name", licensee.LicenseTypeID);
                 ViewData["OfficeID"] = new SelectList(activeOffices, "OfficeID", "Name", licensee.OfficeID);
+                ViewData["StatusList"] = new SelectList(statuses, "Value", "Text", ((int)licensee.Status).ToString());
                 return View(licensee);
             }
             catch (Exception ex)
@@ -163,6 +213,13 @@ namespace LicenseeManager.Controllers
 
             if (ModelState.IsValid)
             {
+
+                if (licensee.Status == LicenseeStatus.Expired)
+                {
+                    ModelState.AddModelError("Status", "A licensee cannot be saved with an expired status. Please renew their license or mark them as inactive instead.");
+                    return View(licensee);
+                }
+
                 try
                 {
                     licensee.UpdatedAt = DateTime.Now;
@@ -192,8 +249,28 @@ namespace LicenseeManager.Controllers
             try
             {
                 var activeOffices = await _context.Offices.Where(o => o.Active).ToListAsync();
+
+                // Build the status dropdown logic
+                var statuses = Enum.GetValues(typeof(LicenseeStatus))
+                    .Cast<LicenseeStatus>()
+                    .Select(s => new SelectListItem
+                    {
+                        Value = ((int)s).ToString(),
+                        Text = s.ToString()
+                    })
+                    .ToList();
+
+                // If NOT expired, remove "Expired" from the dropdown
+                if (licensee.Status != LicenseeStatus.Expired)
+                {
+                    statuses = statuses
+                        .Where(s => s.Text != LicenseeStatus.Expired.ToString())
+                        .ToList();
+                }
+
                 ViewData["LicenseTypeID"] = new SelectList(_context.LicenseType, "LicenseTypeID", "Name", licensee.LicenseTypeID);
                 ViewData["OfficeID"] = new SelectList(activeOffices, "OfficeID", "Name", licensee.OfficeID);
+                ViewData["StatusList"] = new SelectList(statuses, "Value", "Text", ((int)licensee.Status).ToString());
                 return View(licensee);
             }
             catch (Exception ex)

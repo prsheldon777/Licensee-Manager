@@ -53,11 +53,12 @@
                 </div>
             </div>
 
-            <div class="mb-3">
-                <label asp-for="Status" class="form-label fw-semibold"></label>
-                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<LicenseeStatus>()"></select>
+            <div class="form-group">
+                <label asp-for="Status" class="control-label"></label>
+                <select asp-for="Status" class="form-control" asp-items="ViewBag.StatusList"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+
 
             <div class="row">
                 <div class="col-md-6 mb-3">

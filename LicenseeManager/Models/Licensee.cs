@@ -54,7 +54,7 @@ namespace LicenseeManager.Models
         public DateTime? ExpirationDate { get; set; }
 
         [Display(Name = "Created On")]
-        public DateTime? CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
         [Display(Name = "Updated On")]
         public DateTime? UpdatedAt { get; set; }

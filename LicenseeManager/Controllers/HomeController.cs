@@ -3,8 +3,6 @@ using LicenseeManager.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
-using Licensee_Manager.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace LicenseeManager.Controllers
 {
@@ -21,43 +19,64 @@ namespace LicenseeManager.Controllers
 
         public IActionResult Index(int? daysAhead)
         {
-            // Default to 30 if not provided or invalid
-            var range = (daysAhead.HasValue && daysAhead.Value > 0) ? daysAhead.Value : 30;
+            try
+            {
+                // Default to 30 if not provided or invalid
+                var range = (daysAhead.HasValue && daysAhead.Value > 0) ? daysAhead.Value : 30;
 
-            // In a real production system, this would likely be run by a scheduled
-            // SQL Server Agent job (e.g., nightly) instead of on page load.
-            // For this demo, we call it here so reviewers can immediately see
-            // licenses automatically transitioning to 'Expired'.
-            _context.Database.ExecuteSqlRaw("EXEC SetExpired");
+                // In production, this would likely be a scheduled SQL Agent job.
+                // For demo purposes, run the expiration procedure here.
+                _context.Database.ExecuteSqlRaw("EXEC SetExpired");
 
-            var expired = _context.Licensees
-                .FromSqlRaw("EXEC GetExpiredLicensees @Mode = {0}, @DaysAhead = {1}",
-                            0, range)
-                .AsEnumerable()
-                .ToList();
+                var expired = _context.Licensees
+                    .FromSqlRaw("EXEC GetExpiredLicensees @Mode = {0}, @DaysAhead = {1}", 0, range)
+                    .AsEnumerable()
+                    .ToList();
 
-            var expiringSoon = _context.Licensees
-                .FromSqlRaw("EXEC GetExpiredLicensees @Mode = {0}, @DaysAhead = {1}",
-                            1, range)
-                .AsEnumerable()
-                .ToList();
+                var expiringSoon = _context.Licensees
+                    .FromSqlRaw("EXEC GetExpiredLicensees @Mode = {0}, @DaysAhead = {1}", 1, range)
+                    .AsEnumerable()
+                    .ToList();
 
-            ViewBag.ExpiredLicensees = expired;
-            ViewBag.ExpiringSoonLicensees = expiringSoon;
-            ViewBag.DaysAhead = range;  // variable to store how long to look ahead for expiring licenses
+                ViewBag.ExpiredLicensees = expired;
+                ViewBag.ExpiringSoonLicensees = expiringSoon;
+                ViewBag.DaysAhead = range;
 
-            return View();
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to load dashboard: {ex.Message}");
+                // In production, this would be logged to a persistent error log instead.
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         public IActionResult Privacy()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Failed to load Privacy page: {ex.Message}");
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[ERROR] Error view rendering failed: {ex.Message}");
+                return Content("An unexpected error occurred. Please contact support.");
+            }
         }
     }
 }
