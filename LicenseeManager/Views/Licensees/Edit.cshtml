@@ -5,84 +5,99 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-dark text-white">
+        <h4 class="mb-0">Edit Licensee</h4>
+    </div>
 
-<h4>Licensee</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    <div class="card-body">
         <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
             <input type="hidden" asp-for="LicenseeID" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label fw-semibold"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label fw-semibold"></label>
+                    <input asp-for="LastName" class="form-control" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold"></label>
+                    <input asp-for="Email" class="form-control" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LicenseNumber" class="form-label fw-semibold"></label>
+                    <input asp-for="LicenseNumber" class="form-control" />
+                    <span asp-validation-for="LicenseNumber" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LicenseTypeID" class="form-label fw-semibold"></label>
+                    <select asp-for="LicenseTypeID" class="form-select" asp-items="ViewBag.LicenseTypeID"></select>
+                    <span asp-validation-for="LicenseTypeID" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="OfficeID" class="form-label fw-semibold"></label>
+                    <select asp-for="OfficeID" class="form-select" asp-items="ViewBag.OfficeID"></select>
+                    <span asp-validation-for="OfficeID" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="LicenseNumber" class="control-label"></label>
-                <input asp-for="LicenseNumber" class="form-control" />
-                <span asp-validation-for="LicenseNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LicenseTypeID" class="control-label"></label>
-                <select asp-for="LicenseTypeID" class="form-control" asp-items="ViewBag.LicenseTypeID"></select>
-                <span asp-validation-for="LicenseTypeID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OfficeID" class="control-label"></label>
-                <select asp-for="OfficeID" class="form-control" asp-items="ViewBag.OfficeID"></select>
-                <span asp-validation-for="OfficeID" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Status" class="control-label"></label>
-                <select asp-for="Status"
-                        class="form-control"
-                        asp-items="Html.GetEnumSelectList<LicenseeStatus>()">
-                </select>
+
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label fw-semibold"></label>
+                <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<LicenseeStatus>()"></select>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="IssueDate" class="control-label"></label>
-                <input asp-for="IssueDate" class="form-control" />
-                <span asp-validation-for="IssueDate" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="IssueDate" class="form-label fw-semibold"></label>
+                    <input asp-for="IssueDate" class="form-control" type="date" />
+                    <span asp-validation-for="IssueDate" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="ExpirationDate" class="form-label fw-semibold"></label>
+                    <input asp-for="ExpirationDate" class="form-control" type="date" />
+                    <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ExpirationDate" class="control-label"></label>
-                <input asp-for="ExpirationDate" class="form-control" />
-                <span asp-validation-for="ExpirationDate" class="text-danger"></span>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="CreatedAt" class="form-label fw-semibold"></label>
+                    <input asp-for="CreatedAt" class="form-control" readonly />
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="UpdatedAt" class="form-label fw-semibold"></label>
+                    <input asp-for="UpdatedAt" class="form-control" readonly />
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label"></label>
-                <input asp-for="CreatedAt" class="form-control" />
-                <span asp-validation-for="CreatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedAt" class="control-label"></label>
-                <input asp-for="UpdatedAt" class="form-control" />
-                <span asp-validation-for="UpdatedAt" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <button type="submit" class="btn btn-primary px-4">
+                    <i class="bi bi-save"></i> Save Changes
+                </button>
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

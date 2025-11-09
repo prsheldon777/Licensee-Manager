@@ -1,0 +1,33 @@
+﻿<li class="nav-item dropdown d-flex align-items-center">
+    <a class="nav-link position-relative px-2" href="@Url.Action("Index", "Home")" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="bi bi-bell-fill fs-5"></i>
+        @if (ViewBag.TotalAlerts > 0)
+        {
+            <span class="position-absolute translate-middle badge rounded-pill bg-danger"
+                  style="top: 8px; left: 22px; font-size: 0.65rem;">
+                @ViewBag.TotalAlerts
+            </span>
+        }
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+        <li><h6 class="dropdown-header fw-bold">License Alerts</h6></li>
+
+        @if (ViewBag.Expired > 0)
+        {
+            <li>
+                <a class="dropdown-item text-danger fw-semibold" href="@Url.Action("Index", "Home")#expired">
+                    @ViewBag.Expired Expired License@(ViewBag.Expired > 1 ? "s" : "")
+                </a>
+            </li>
+        }
+        @if (ViewBag.ExpiringSoon > 0)
+        {
+            <li>
+                <a class="dropdown-item text-warning fw-semibold" href="@Url.Action("Index", "Home")#expiring">
+                    @ViewBag.ExpiringSoon Expiring Soon
+                </a>
+            </li>
+        }
+    </ul>
+</li>

@@ -53,9 +53,10 @@
                     @Html.DisplayFor(modelItem => item.Office.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.LicenseeID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LicenseeID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LicenseeID">Delete</a>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.LicenseeID" class="btn btn-sm btn-secondary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.LicenseeID" class="btn btn-sm btn-secondary">Details</a>
+                    </div>
                 </td>
             </tr>
         }

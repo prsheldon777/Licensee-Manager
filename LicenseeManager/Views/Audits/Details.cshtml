@@ -1,43 +1,35 @@
 ﻿@model LicenseeManager.Models.Audit
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Audit Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="card shadow-sm mt-4">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h4 class="mb-0">Audit Log Entry</h4>
+        <span class="badge bg-secondary">ID: @Model.AuditId</span>
+    </div>
 
-<div>
-    <h4>Audit</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.OldStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OldStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.NewStatus)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.NewStatus)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ChangedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ChangedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Licensee)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Licensee.FullName)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.AuditId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3 fw-semibold text-muted">Licensee</dt>
+            <dd class="col-sm-9">@Model.Licensee?.FullName</dd>
+
+            <dt class="col-sm-3 fw-semibold text-muted">Old Status</dt>
+            <dd class="col-sm-9">@Model.OldStatus</dd>
+
+            <dt class="col-sm-3 fw-semibold text-muted">New Status</dt>
+            <dd class="col-sm-9">@Model.NewStatus</dd>
+
+            <dt class="col-sm-3 fw-semibold text-muted">Changed On</dt>
+            <dd class="col-sm-9">@Model.ChangedAt.ToString("g")</dd>
+        </dl>
+    </div>
+
+    <div class="card-footer d-flex justify-content-between">
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
 </div>

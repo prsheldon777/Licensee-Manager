@@ -15,21 +15,6 @@
 <div class="container mt-4">
     <h1 class="mb-3 text-center fw-bold">Licensee Dashboard</h1>
 
-    <div class="row mb-4">
-        <div class="col-md-6 offset-md-3">
-            <form method="get" class="d-flex align-items-center justify-content-center gap-2">
-                <label for="daysAhead" class="me-2 fw-semibold">Show licenses expiring in the next</label>
-                <select id="daysAhead" name="daysAhead" class="form-select w-auto"
-                        onchange="this.form.submit()">
-                    <option value="7"  selected="@(daysAhead == 7 ? "selected" : null)">7 days</option>
-                    <option value="30" selected="@(daysAhead == 30 ? "selected" : null)">30 days</option>
-                    <option value="60" selected="@(daysAhead == 60 ? "selected" : null)">60 days</option>
-                    <option value="90" selected="@(daysAhead == 90 ? "selected" : null)">90 days</option>
-                </select>
-            </form>
-        </div>
-    </div>
-
     <div class="row">
         <!-- Expired Licenses -->
         <div class="col-md-6 mb-4">
@@ -81,10 +66,23 @@
         <!-- Expiring Soon -->
         <div class="col-md-6 mb-4">
             <div class="card dashboard-card border-warning shadow">
-                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
-                    <span>Licenses Expiring Soon (Next @daysAhead Days)</span>
+                <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center flex-wrap">
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bold">Licenses Expiring Soon</span>
+                        <form method="get" class="d-flex align-items-center ms-2">
+                            <label for="daysAhead" class="me-2 fw-semibold small">Next</label>
+                            <select id="daysAhead" name="daysAhead" class="form-select form-select-sm w-auto"
+                                    onchange="this.form.submit()">
+                                <option value="7" selected="@(daysAhead == 7 ? "selected" : null)">7 days</option>
+                                <option value="30" selected="@(daysAhead == 30 ? "selected" : null)">30 days</option>
+                                <option value="60" selected="@(daysAhead == 60 ? "selected" : null)">60 days</option>
+                                <option value="90" selected="@(daysAhead == 90 ? "selected" : null)">90 days</option>
+                            </select>
+                        </form>
+                    </div>
                     <span class="badge badge-expiring">@expiringCount expiring soon</span>
                 </div>
+
                 <div class="card-body">
                     @if (expiringSoon != null && expiringSoon.Any())
                     {

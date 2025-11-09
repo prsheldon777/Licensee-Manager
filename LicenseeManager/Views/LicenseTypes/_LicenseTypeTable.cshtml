@@ -15,9 +15,11 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.LicenseTypeID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.LicenseTypeID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.LicenseTypeID">Delete</a>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.LicenseTypeID" class="btn btn-sm btn-secondary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.LicenseTypeID" class="btn btn-sm btn-secondary">Details</a>
+                        <a asp-action="Delete" asp-route-id="@item.LicenseTypeID" class="btn btn-sm btn-secondary">Delete</a>
+                    </div>
                 </td>
             </tr>
         }

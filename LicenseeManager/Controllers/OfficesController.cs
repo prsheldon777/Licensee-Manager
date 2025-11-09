@@ -117,35 +117,53 @@ namespace LicenseeManager.Controllers
         }
 
         // GET: Offices/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Deactivate(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var office = await _context.Offices
-                .FirstOrDefaultAsync(m => m.OfficeID == id);
+                .Include(o => o.Licensees)
+                .FirstOrDefaultAsync(o => o.OfficeID == id);
+
             if (office == null)
-            {
                 return NotFound();
-            }
+
+            // Get all active offices except the one being deactivated
+            ViewBag.AvailableOffices = new SelectList(
+                _context.Offices.Where(o => o.Active && o.OfficeID != id),
+                "OfficeID", "Name"
+            );
 
             return View(office);
         }
 
-        // POST: Offices/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeactivateConfirmed(int id, int? newOfficeId)
         {
-            var office = await _context.Offices.FindAsync(id);
-            if (office != null)
+            var office = await _context.Offices
+                .Include(o => o.Licensees)
+                .FirstOrDefaultAsync(o => o.OfficeID == id);
+
+            if (office == null)
+                return NotFound();
+
+            // If there's a replacement office selected, reassign
+            if (newOfficeId.HasValue)
             {
-                _context.Offices.Remove(office);
+                var licensees = _context.Licensees.Where(l => l.OfficeID == id).ToList();
+                foreach (var l in licensees)
+                    l.OfficeID = newOfficeId.Value;
+
+                await _context.SaveChangesAsync();
             }
 
+            // Mark office inactive
+            office.Active = false;
             await _context.SaveChangesAsync();
+
+            TempData["Message"] = "Office deactivated successfully.";
             return RedirectToAction(nameof(Index));
         }
 
@@ -180,6 +198,9 @@ namespace LicenseeManager.Controllers
                 case "State":
                     query = sortOrder == "asc" ? query.OrderBy(o => o.State) : query.OrderByDescending(o => o.State);
                     break;
+                case "ActiveStatus":
+                    query = sortOrder == "asc" ? query.OrderBy(o => o.Active) : query.OrderByDescending(o => o.Active);
+                    break;
                 default:
                     query = query.OrderBy(o => o.OfficeID);
                     break;
@@ -187,6 +208,22 @@ namespace LicenseeManager.Controllers
 
             var results = query.ToList();
             return PartialView("_OfficeTable", results);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Activate(int id)
+        {
+            var office = await _context.Offices.FindAsync(id);
+            if (office == null)
+            {
+                return NotFound();
+            }
+
+            office.Active = true;
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = $"{office.Name} has been activated.";
+            return RedirectToAction(nameof(Index));
         }
     }
 }

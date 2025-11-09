@@ -44,7 +44,7 @@ namespace LicenseeManager.Controllers
 
             ViewBag.ExpiredLicensees = expired;
             ViewBag.ExpiringSoonLicensees = expiringSoon;
-            ViewBag.DaysAhead = range;  // so the view knows what was selected
+            ViewBag.DaysAhead = range;  // variable to store how long to look ahead for expiring licenses
 
             return View();
         }
@@ -57,7 +57,7 @@ namespace LicenseeManager.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View();
         }
     }
 }

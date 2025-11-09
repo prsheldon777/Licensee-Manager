@@ -49,6 +49,7 @@
                             <a class="nav-link text-dark @(currentController == "Home" && currentAction == "Privacy" ? "active" : "")"
                                asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @await Component.InvokeAsync("DashboardAlert")
                     </ul>
                 </div>
             </div>

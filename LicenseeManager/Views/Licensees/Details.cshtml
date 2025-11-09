@@ -1,85 +1,61 @@
 ﻿@model LicenseeManager.Models.Licensee
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Licensee Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-3 border-bottom pb-2">Licensee Details</h1>
 
-<div>
-    <h4>Licensee</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LicenseNumber)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LicenseNumber)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Status)
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Status.ToString()
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IssueDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IssueDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ExpirationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ExpirationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedAt)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedAt)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.LicenseType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LicenseType.LicenseTypeID)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Office)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Office.OfficeID)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.LicenseeID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-sm border-0">
+        <!-- Match the dark theme header -->
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@Model.FullName</h4>
+            <span class="badge
+                @(Model.Status == LicenseeManager.Models.LicenseeStatus.Active ? "bg-success" :
+                                    Model.Status == LicenseeManager.Models.LicenseeStatus.Expired ? "bg-danger" : "bg-secondary")">
+                @Model.Status.ToString()
+            </span>
+        </div>
+
+        <div class="card-body bg-light">
+            <dl class="row mb-0">
+                <dt class="col-sm-3 text-muted">First Name</dt>
+                <dd class="col-sm-9 fw-semibold">@Model.FirstName</dd>
+
+                <dt class="col-sm-3 text-muted">Last Name</dt>
+                <dd class="col-sm-9 fw-semibold">@Model.LastName</dd>
+
+                <dt class="col-sm-3 text-muted">Email</dt>
+                <dd class="col-sm-9">@Model.Email</dd>
+
+                <dt class="col-sm-3 text-muted">License Number</dt>
+                <dd class="col-sm-9">@Model.LicenseNumber</dd>
+
+                <dt class="col-sm-3 text-muted">Issue Date</dt>
+                <dd class="col-sm-9">@Model.IssueDate?.ToShortDateString()</dd>
+
+                <dt class="col-sm-3 text-muted">Expiration Date</dt>
+                <dd class="col-sm-9">@Model.ExpirationDate?.ToShortDateString()</dd>
+
+                <dt class="col-sm-3 text-muted">Created At</dt>
+                <dd class="col-sm-9">@Model.CreatedAt?.ToShortDateString()</dd>
+
+                <dt class="col-sm-3 text-muted">Updated At</dt>
+                <dd class="col-sm-9">@Model.UpdatedAt?.ToShortDateString()</dd>
+
+                <dt class="col-sm-3 text-muted">License Type</dt>
+                <dd class="col-sm-9">@Model.LicenseType?.Name</dd>
+
+                <dt class="col-sm-3 text-muted">Office</dt>
+                <dd class="col-sm-9">@Model.Office?.Name</dd>
+            </dl>
+        </div>
+
+        <div class="card-footer text-end bg-white">
+            <a asp-action="Edit" asp-route-id="@Model.LicenseeID" class="btn btn-sm btn-primary me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
 </div>

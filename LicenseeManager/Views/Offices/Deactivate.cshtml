@@ -1,0 +1,44 @@
+﻿@model LicenseeManager.Models.Office
+    
+@{
+    ViewData["Title"] = "Deactivate Office";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Deactivate Office</h1>
+
+<div class="alert alert-warning">
+    <strong>Warning:</strong> You are about to deactivate the office
+    <span class="fw-bold">@Model.Name</span>.
+    <br />
+    If there are licensees currently assigned here, they will need to be reassigned to another active office.
+</div>
+
+@if (Model.Licensees != null && Model.Licensees.Any())
+{
+    <p><strong>@Model.Licensees.Count()</strong> licensees are assigned to this office.</p>
+
+    <form asp-action="DeactivateConfirmed">
+        <input type="hidden" name="id" value="@Model.OfficeID" />
+
+        <div class="form-group mb-3">
+            <label for="newOfficeId" class="form-label">Move licensees to:</label>
+            <select id="newOfficeId" name="newOfficeId" class="form-select" asp-items="ViewBag.AvailableOffices">
+                <option value="">-- Select Active Office --</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-warning">Confirm Deactivation</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+}
+else
+{
+    <p>No licensees are assigned to this office.</p>
+
+    <form asp-action="DeactivateConfirmed">
+        <input type="hidden" name="id" value="@Model.OfficeID" />
+        <button type="submit" class="btn btn-warning">Deactivate Office</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </form>
+}

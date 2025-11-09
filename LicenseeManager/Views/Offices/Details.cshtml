@@ -1,37 +1,45 @@
 ﻿@model LicenseeManager.Models.Office
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Office Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="container mt-4">
+    <h1 class="mb-3 border-bottom pb-2">Office Details</h1>
 
-<div>
-    <h4>Office</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.City)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.City)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.State)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.State)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.OfficeID">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <div class="card shadow-sm border-0">
+        <!-- Dark header matches the black table header -->
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">@Model.Name</h4>
+            <span class="badge @(Model.Active ? "bg-success" : "bg-secondary")">
+                @(Model.Active ? "Active" : "Inactive")
+            </span>
+        </div>
+
+        <div class="card-body bg-light">
+            <dl class="row mb-0">
+                <dt class="col-sm-3 text-muted">Office Name</dt>
+                <dd class="col-sm-9 fw-semibold">@Model.Name</dd>
+
+                <dt class="col-sm-3 text-muted">City</dt>
+                <dd class="col-sm-9">@Model.City</dd>
+
+                <dt class="col-sm-3 text-muted">State</dt>
+                <dd class="col-sm-9">@Model.State</dd>
+
+                <dt class="col-sm-3 text-muted">Status</dt>
+                <dd class="col-sm-9">
+                    <span class="fw-semibold @(Model.Active ? "text-success" : "text-danger")">
+                        @(Model.Active ? "Active" : "Inactive")
+                    </span>
+                </dd>
+            </dl>
+        </div>
+
+        <div class="card-footer text-end bg-white">
+            <a asp-action="Edit" asp-route-id="@Model.OfficeID" class="btn btn-sm btn-primary me-2">Edit</a>
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
 </div>

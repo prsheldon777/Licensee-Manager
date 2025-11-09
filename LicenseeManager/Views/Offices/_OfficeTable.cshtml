@@ -6,6 +6,7 @@
             <th><a href="#" class="sort-link" data-sort="Name">Name</a></th>
             <th><a href="#" class="sort-link" data-sort="City">City</a></th>
             <th><a href="#" class="sort-link" data-sort="State">State</a></th>
+            <th><a href="#" class="sort-link" data-sort="ActiveStatus">Active Status</a></th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -13,19 +14,32 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.City)</td>
+                <td>@Html.DisplayFor(modelItem => item.State)</td>
+                <td>@Html.DisplayFor(modelItem => item.ActiveStatus)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.State)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.OfficeID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.OfficeID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.OfficeID">Delete</a>
+                    <div class="btn-group" role="group">
+                        <a asp-action="Edit" asp-route-id="@item.OfficeID" class="btn btn-sm btn-secondary">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.OfficeID" class="btn btn-sm btn-secondary">Details</a>
+
+                        @if (item.Active)
+                        {
+                            <a asp-action="Deactivate"
+                               asp-route-id="@item.OfficeID"
+                               class="btn btn-sm btn-warning text-dark btn-status-toggle">
+                                Deactivate
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-action="Activate"
+                               asp-route-id="@item.OfficeID"
+                               class="btn btn-sm btn-success btn-status-toggle">
+                                Activate
+                            </a>
+                        }
+                    </div>
                 </td>
             </tr>
         }
