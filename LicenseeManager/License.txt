@@ -1,0 +1,18 @@
+﻿Copyright (c) 2025 Patrick Sheldon. All rights reserved.
+
+This software project and its associated source code were developed solely
+for educational, demonstration, and technical evaluation purposes.
+
+Permission is hereby granted to review, compile, and run this code
+for evaluation or academic purposes only.
+
+No permission is granted to modify, distribute, copy, reuse, or deploy this
+project or any portion thereof for production, commercial, or operational use
+without the express written consent of the author.
+
+All intellectual property rights remain the exclusive property of the author.
+Any unauthorized use, reproduction, or distribution of this code, in whole
+or in part, is strictly prohibited.
+
+For permissions or inquiries, please contact:
+prsheldon777@gmail.com
