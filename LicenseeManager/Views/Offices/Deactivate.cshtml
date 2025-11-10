@@ -18,7 +18,7 @@
 {
     <p><strong>@Model.Licensees.Count()</strong> licensees are assigned to this office.</p>
 
-    <form asp-action="DeactivateConfirmed">
+    <form asp-action="DeactivateConfirmed" id="deactivateForm">
         <input type="hidden" name="id" value="@Model.OfficeID" />
 
         <div class="form-group mb-3">
@@ -26,11 +26,33 @@
             <select id="newOfficeId" name="newOfficeId" class="form-select" asp-items="ViewBag.AvailableOffices">
                 <option value="">-- Select Active Office --</option>
             </select>
+            <span id="officeError" class="text-danger d-none">Please select an active office before deactivating.</span>
         </div>
 
         <button type="submit" class="btn btn-warning">Confirm Deactivation</button>
         <a asp-action="Index" class="btn btn-secondary">Cancel</a>
     </form>
+
+    @section Scripts {
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const form = document.getElementById("deactivateForm");
+                const select = document.getElementById("newOfficeId");
+                const error = document.getElementById("officeError");
+
+                form.addEventListener("submit", function (e) {
+                    if (select && select.value.trim() === "") {
+                        e.preventDefault();
+                        error.classList.remove("d-none");
+                        select.classList.add("is-invalid");
+                    } else {
+                        error.classList.add("d-none");
+                        select.classList.remove("is-invalid");
+                    }
+                });
+            });
+        </script>
+    }
 }
 else
 {

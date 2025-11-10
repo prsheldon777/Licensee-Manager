@@ -197,56 +197,6 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: LicenseTypes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            try
-            {
-                var licenseType = await _context.LicenseType
-                    .FirstOrDefaultAsync(m => m.LicenseTypeID == id);
-
-                if (licenseType == null)
-                {
-                    return NotFound();
-                }
-
-                return View(licenseType);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to load Delete confirmation for LicenseType ID {id}: {ex.Message}");
-                return RedirectToAction("Error", "Home");
-            }
-        }
-
-        // POST: LicenseTypes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            try
-            {
-                var licenseType = await _context.LicenseType.FindAsync(id);
-                if (licenseType != null)
-                {
-                    _context.LicenseType.Remove(licenseType);
-                    await _context.SaveChangesAsync();
-                }
-
-                return RedirectToAction(nameof(Index));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"[ERROR] Failed to delete LicenseType ID {id}: {ex.Message}");
-                return RedirectToAction("Error", "Home");
-            }
-        }
-
         private bool LicenseTypeExists(int id)
         {
             try
