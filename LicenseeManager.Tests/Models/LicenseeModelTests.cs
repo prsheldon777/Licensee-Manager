@@ -88,7 +88,7 @@ namespace LicenseeManager.Tests.Models
         [InlineData("John", "Doe", "John Doe")]
         [InlineData("Jane", "", "Jane")]
         [InlineData("", "Smith", "Smith")]
-        public void FullName_HandlesMissingPartsGracefully(string first, string last, string expected)
+        public void FullName_HandlesMissingParts(string first, string last, string expected)
         {
             // Arrange
             var licensee = new Licensee { FirstName = first, LastName = last };
