@@ -10,16 +10,37 @@ using Licensee_Manager.Models;
 
 namespace LicenseeManager.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing licensee records.
+    /// Provides actions to list, view details, create, edit, and search licensees.
+    /// All data access is performed via an injected <see cref="AppDbContext"/>.
+    /// </summary>
     public class LicenseesController : Controller
     {
         private readonly AppDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LicenseesController"/> class.
+        /// </summary>
+        /// <param name="context">The application's database context used to query and persist licensee-related data.</param>
         public LicenseesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Licensees
+        /// <summary>
+        /// GET: Licensees
+        /// Retrieves the list of licensees including their license type and office information.
+        /// The list is ordered with active statuses first by descending status.
+        /// </summary>
+        /// <returns>
+        /// An asynchronous task that resolves to an <see cref="IActionResult"/> rendering the default Index view
+        /// populated with the list of licensees.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Exceptions thrown while querying the database are caught; errors are written to the console
+        /// and the user is redirected to the Home/Error page.
+        /// </exception>
         public async Task<IActionResult> Index()
         {
             try
@@ -38,7 +59,18 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Licensees/Details/5
+        /// <summary>
+        /// GET: Licensees/Details/5
+        /// Retrieves a single licensee by identifier including related license type and office.
+        /// </summary>
+        /// <param name="id">The identifier of the licensee to display. Nullable.</param>
+        /// <returns>
+        /// - <see cref="NotFoundResult"/> when <paramref name="id"/> is null or the licensee does not exist.
+        /// - A view rendering the licensee when found.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Database query exceptions are caught and logged to the console; the user is redirected to Home/Error.
+        /// </exception>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -67,7 +99,15 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Licensees/Create
+        /// <summary>
+        /// GET: Licensees/Create
+        /// Prepares data required for the Create view, including active offices, license types, and status options.
+        /// Excludes the 'Expired' status from the initial creation status list.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> that renders the Create view with populated ViewData entries.</returns>
+        /// <exception cref="Exception">
+        /// Any exception while preparing view data is caught, logged, and redirects to Home/Error.
+        /// </exception>
         public async Task<IActionResult> Create()
         {
             try
@@ -98,7 +138,22 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // POST: Licensees/Create
+        /// <summary>
+        /// POST: Licensees/Create
+        /// Attempts to create a new licensee record. If model validation passes, sets created timestamp and persists the entity.
+        /// If validation fails, repopulates select lists and returns the Create view with validation messages.
+        /// </summary>
+        /// <param name="licensee">The licensee model bound from the request form.</param>
+        /// <returns>
+        /// - Redirects to Index on successful creation.
+        /// - Returns the Create view with the provided model and populated select lists when validation fails.
+        /// </returns>
+        /// <remarks>
+        /// Uses anti-forgery validation via <see cref="ValidateAntiForgeryTokenAttribute"/>.
+        /// </remarks>
+        /// <exception cref="Exception">
+        /// Exceptions during database operations are caught and redirect to Home/Error after logging.
+        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LicenseeID,FirstName,LastName,Email,LicenseNumber,LicenseTypeID,OfficeID,Status,IssueDate,ExpirationDate,CreatedAt,UpdatedAt")] Licensee licensee)
@@ -153,7 +208,19 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Licensees/Edit/5
+        /// <summary>
+        /// GET: Licensees/Edit/5
+        /// Loads an existing licensee for editing and prepares select list data (license types, active offices, status list).
+        /// Excludes the 'Expired' status unless the current entity is already expired.
+        /// </summary>
+        /// <param name="id">The identifier of the licensee to edit. Nullable.</param>
+        /// <returns>
+        /// - <see cref="NotFoundResult"/> if <paramref name="id"/> is null or the licensee does not exist.
+        /// - A view rendering the Edit form populated with the licensee model and select lists.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Errors encountered while loading the licensee or preparing view data are caught and cause a redirect to Home/Error.
+        /// </exception>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -201,7 +268,24 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // POST: Licensees/Edit/5
+        /// <summary>
+        /// POST: Licensees/Edit/5
+        /// Persists changes to an existing licensee. Validates that the id matches the model and prevents saving an Expired status.
+        /// Handles concurrency exceptions and other database errors.
+        /// </summary>
+        /// <param name="id">The identifier of the licensee being edited.</param>
+        /// <param name="licensee">The bound licensee model containing updated values.</param>
+        /// <returns>
+        /// - Redirects to Index after a successful update.
+        /// - Returns the Edit view with validation messages when model state is invalid.
+        /// - Returns NotFound when the id does not match or the entity no longer exists.
+        /// </returns>
+        /// <exception cref="DbUpdateConcurrencyException">
+        /// Thrown when a concurrency conflict occurs while saving; method checks for existence and rethrows if not resolvable.
+        /// </exception>
+        /// <exception cref="Exception">
+        /// Other database errors are caught, logged, and redirect to Home/Error.
+        /// </exception>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LicenseeID,FirstName,LastName,Email,LicenseNumber,LicenseTypeID,OfficeID,Status,IssueDate,ExpirationDate,CreatedAt,UpdatedAt")] Licensee licensee)
@@ -280,11 +364,30 @@ namespace LicenseeManager.Controllers
             }
         }
 
+        /// <summary>
+        /// Determines whether a licensee with the specified id exists in the database.
+        /// </summary>
+        /// <param name="id">The licensee identifier to check for existence.</param>
+        /// <returns><c>true</c> if a licensee with the given id exists; otherwise, <c>false</c>.</returns>
         private bool LicenseeExists(int id)
         {
             return _context.Licensees.Any(e => e.LicenseeID == id);
         }
 
+        /// <summary>
+        /// GET: Licensees/Search
+        /// Performs a search and optional sorting over licensee records and returns a partial view with results.
+        /// Supports searching by first or last name and many sortable columns.
+        /// </summary>
+        /// <param name="term">Optional search term used to match first or last name.</param>
+        /// <param name="sortBy">Optional column name to sort by (e.g., "FirstName", "LastName", "Email").</param>
+        /// <param name="sortOrder">Sort order, either "asc" (ascending) or "desc" (descending). Defaults to "asc".</param>
+        /// <returns>
+        /// A partial view named "_LicenseeTable" populated with the filtered and sorted list of licensees.
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Exceptions during query execution are caught, logged, and redirect to Home/Error.
+        /// </exception>
         [HttpGet]
         public IActionResult Search(string term, string sortBy, string sortOrder = "asc")
         {

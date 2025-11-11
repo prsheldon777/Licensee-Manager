@@ -1,11 +1,33 @@
-/* --- GLOBAL STYLES --- */
+/* ------------------------------------------------------------------
+   site.css
+   Purpose:
+     - Primary stylesheet for Licensee Manager UI.
+     - Provides base layout, theme colors, and reusable UI class styles used by Razor views.
+   Notes:
+     - Keep selectors reasonably specific to avoid unexpected Bootstrap overrides.
+     - Many rules are designed to enhance Bootstrap components (cards, tables, buttons).
+     - Avoid adding heavy selectors; prefer adding/modifying classes in views for major changes.
+   ------------------------------------------------------------------ */
+/* --- GLOBAL STYLES ---
+   Scope:
+     - Base page background, font, and default text color.
+   Intent:
+     - Provide a neutral light background and legible system fonts.
+*/
 body {
     background-color: #f8f9fa; /* light gray */
     font-family: "Segoe UI", Roboto, sans-serif;
     color: #212529;
 }
 
-/* Navbar */
+/* NAVBAR
+   Scope:
+     - Visual treatment for top navigation bar and brand link.
+   Intent:
+     - Subtle elevation via a box-shadow and stronger emphasis on the brand name.
+   Usage:
+     - Apply .navbar and .navbar-brand to the site's header markup (Bootstrap-compatible).
+*/
 .navbar {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
@@ -14,7 +36,14 @@ body {
     font-weight: 600;
 }
 
-/* Page title */
+/* PAGE TITLE (h1)
+   Scope:
+     - Generic page heading styling used across Razor views.
+   Intent:
+     - Provide consistent spacing, color and a gold underline accent for primary titles.
+   Usage:
+     - Apply to top-level <h1> elements within Views to maintain visual consistency.
+*/
 h1 {
     margin-top: 1rem;
     margin-bottom: 1.5rem;
@@ -24,7 +53,14 @@ h1 {
     padding-bottom: 0.25rem;
 }
 
-/* Buttons */
+/* BUTTONS (primary)
+   Scope:
+     - Primary call-to-action buttons.
+   Intent:
+     - Use gold tones for primary actions to align with dashboard accents.
+   Notes:
+     - Hover state flips to a darker gold and white text for contrast.
+*/
 .btn-primary {
     background-color: #ffc107;
     border-color: #e0a800;
@@ -36,7 +72,14 @@ h1 {
         color: #fff;
     }
 
-/* Tables */
+/* TABLES
+   Scope:
+     - Base table container styling and hover/striping rules.
+   Intent:
+     - Rounded containers, light shadows and subtle hover highlights to improve readability.
+   Notes:
+     - .table thead uses a dark header; ensure text is visible against that background.
+*/
 .table {
     border-radius: 0.5rem;
     overflow: hidden;
@@ -57,7 +100,16 @@ h1 {
         transition: background-color 0.2s ease-in-out;
     }
 
-/* Sort arrows */
+/* SORT ARROWS
+   Scope:
+     - Generic link used for sortable table headers (.sort-link).
+   Intent:
+     - Provide a visual affordance for sortable columns with simple icons via ::after.
+   Usage:
+     - Add .sort-link and .active.asc / .active.desc classes from server-side markup to toggle icons.
+   Notes:
+     - Content characters are chosen for wide font support; replace with icons if desired.
+*/
 .sort-link {
     color: white;
     text-decoration: none;
@@ -84,7 +136,14 @@ h1 {
         opacity: 1;
     }
 
-/* Forms */
+/* FORMS
+   Scope:
+     - Standard input and select controls using .form-control.
+   Intent:
+     - Slightly rounded inputs with subtle inset shadow and gold focus outline.
+   Notes:
+     - Input focus uses a translucent gold ring to match accent color.
+*/
 .form-control, select.form-control {
     border-radius: 0.4rem;
     box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
@@ -95,7 +154,12 @@ h1 {
         box-shadow: 0 0 0 0.2rem rgba(255,193,7,0.25);
     }
 
-/* Cards / containers */
+/* CARDS / CONTAINERS
+   Scope:
+     - Spacing for .container and .row, nav link active styling, small UI tweaks for cards.
+   Intent:
+     - Ensure consistent vertical rhythm and highlight active navigation items.
+*/
 .container, .row {
     margin-bottom: 1.5rem;
 }
@@ -114,6 +178,10 @@ h1 {
     vertical-align: middle;
 }
 
+/* Table color correction for contextual tables
+   Scope:
+     - Ensure text contrast remains readable for table-warning / table-danger contexts.
+*/
 .table-danger th,
 .table-danger td,
 .table-warning th,
@@ -121,7 +189,12 @@ h1 {
     color: #000 !important;
 }
 
-/* === Dashboard (Home Page) Styling === */
+/* === DASHBOARD (HOME PAGE) STYLING ===
+   Scope:
+     - Styles used specifically on the dashboard for summary cards and hover effects.
+   Intent:
+     - Subtle scaling on hover for interactive dashboard tiles.
+*/
 .dashboard-card {
     border-radius: 10px;
     overflow: hidden;
@@ -138,7 +211,12 @@ h1 {
         font-weight: bold;
     }
 
-/* Softer "dark" accents for tables (graphite tone, not black) */
+/* SOFTER "DARK" ACCENTS
+   Scope:
+     - Utility classes for tables that require a muted or slightly darkened background.
+   Intent:
+     - Provide a graphite-ish tone without using pure black, for a softer UI feel.
+*/
 .table-muted {
     background-color: #e9ecef !important;
     color: #212529 !important;
@@ -148,17 +226,24 @@ h1 {
     background-color: #f2f2f2;
 }
 
-.table-slight-dark tbody tr:hover {
-    background-color: #e1e1e1 !important;
-}
+    .table-slight-dark tbody tr:hover {
+        background-color: #e1e1e1 !important;
+    }
 
-.table-slight-dark th {
-    background-color: #dee2e6;
-    color: #212529;
-    border-bottom: 2px solid #bfbfbf;
-}
+    .table-slight-dark th {
+        background-color: #dee2e6;
+        color: #212529;
+        border-bottom: 2px solid #bfbfbf;
+    }
 
-/* Header color variants */
+/* HEADER COLOR VARIANTS
+   Scope:
+     - Quick visual variants for table headers (red / yellow).
+   Intent:
+     - Use sparingly to call out important rows (e.g., errors or warnings).
+   Notes:
+     - These classes include !important on background to override other header styles.
+*/
 .table-header-red th {
     background-color: #ff4d4d !important;
     color: #fff !important;
@@ -171,28 +256,38 @@ h1 {
     border: none;
 }
 
-/* Buttons */
+/* OUTLINE BUTTONS
+   Scope:
+     - Danger and warning outline button styles.
+   Intent:
+     - Keep consistent hover affordances to match filled variants.
+*/
 .btn-outline-danger {
     color: #c82333;
     border-color: #c82333;
 }
 
-.btn-outline-danger:hover {
-    background-color: #c82333;
-    color: #fff;
-}
+    .btn-outline-danger:hover {
+        background-color: #c82333;
+        color: #fff;
+    }
 
 .btn-outline-warning {
     color: #e0a800;
     border-color: #e0a800;
 }
 
-.btn-outline-warning:hover {
-    background-color: #ffc107;
-    color: #000;
-}
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        color: #000;
+    }
 
-/* === Dashboard Badge Styling === */
+/* === DASHBOARD BADGE STYLING ===
+   Scope:
+     - Badges used in dashboard tiles to show expiration status.
+   Intent:
+     - Provide accessible contrast and visual weight (padding, border) for badges.
+*/
 .badge-expired {
     background-color: #f8d7da; /* light red tone */
     color: #721c24; /* deep crimson text */
@@ -211,17 +306,28 @@ h1 {
     border-radius: 0.5rem;
 }
 
-/* Subtle hover for badges in headers */
+/* BADGE INTERACTIONS
+   Scope:
+     - Subtle hover effect for badges located in card headers.
+*/
 .card-header .badge:hover {
     transform: scale(1.05);
     transition: transform 0.2s ease-in-out;
 }
 
+/* DARK CARD HEADER
+   Scope:
+     - Variant for card headers that should appear dark with a yellow accent underline.
+*/
 .card-header.bg-dark {
     background-color: #212529 !important;
     border-bottom: 3px solid #ffcc00; /* subtle yellow accent like your dashboard */
 }
 
+/* CARD / CARD BODY
+   Scope:
+     - Shape and body background for cards to keep consistent card styling.
+*/
 .card {
     border-radius: 0.5rem;
 }
@@ -230,6 +336,10 @@ h1 {
     background-color: #f8f9fa;
 }
 
+/* DEFINITION LISTS
+   Scope:
+     - Styling for dl.row used for key/value pairs in details pages.
+*/
 dl.row dt {
     font-weight: 600;
 }
@@ -238,6 +348,12 @@ dl.row dd {
     margin-bottom: 0.75rem;
 }
 
+/* BUTTON GROUPS & SMALL BUTTONS
+   Scope:
+     - Spacing and sizing for grouped action buttons and small buttons.
+   Notes:
+     - Keep min-width to maintain consistent layout when labels differ in length.
+*/
 .btn-group .btn {
     margin-right: 0.25rem;
     min-width: 70px;
@@ -255,21 +371,34 @@ dl.row dd {
     color: #343a40;
 }
 
-.btn-outline-secondary:hover {
-    background-color: #6c757d;
-    color: #fff;
-}
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        color: #fff;
+    }
 
+/* NOTE: button small override below increases min-width for specific usages */
 .btn-sm {
-    min-width: 95px; 
+    min-width: 95px;
     text-align: center;
 }
 
+/* STATUS TOGGLE BUTTON
+   Scope:
+     - Compact toggle used in licensee lists for status controls.
+   Usage:
+     - Adjust width here until it visually aligns with table layout.
+*/
 .btn-status-toggle {
     width: 85px; /* tweak this until it looks right */
     text-align: center;
 }
 
+/* NAVBAR ICONS / NOTIFICATIONS
+   Scope:
+     - Bell icon and notification badge behaviors in navbar.
+   Intent:
+     - Keep icon color neutral, highlight on hover with accent color.
+*/
 .navbar .bi-bell-fill {
     color: #343a40;
     vertical-align: middle;
@@ -289,6 +418,12 @@ dl.row dd {
     transition: color 0.2s ease-in-out;
 }
 
+/* NAV ITEMS (aligned end)
+   Scope:
+     - Ensure right-aligned navigation items are vertically centered.
+   Usage:
+     - Used together with Bootstrap utility classes (ms-auto) in markup.
+*/
 .navbar-nav.ms-auto .nav-item {
     display: flex;
     align-items: center;

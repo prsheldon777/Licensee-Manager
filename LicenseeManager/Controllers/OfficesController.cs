@@ -9,16 +9,29 @@ using Licensee_Manager.Models;
 
 namespace LicenseeManager.Controllers
 {
+    /// <summary>
+    /// Controller responsible for managing Office entities.
+    /// Provides actions for listing, creating, editing, activating, deactivating and searching offices.
+    /// </summary>
     public class OfficesController : Controller
     {
         private readonly AppDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OfficesController"/> class.
+        /// </summary>
+        /// <param name="context">The application database context used to query and persist office data.</param>
         public OfficesController(AppDbContext context)
         {
             _context = context;
         }
 
-        // GET: Offices
+        /// <summary>
+        /// GET: Offices
+        /// Retrieves all offices and returns the Index view.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> that renders the Index view with the list of offices.
+        /// On error, logs the exception and redirects to Home/Error.</returns>
         public async Task<IActionResult> Index()
         {
             try
@@ -32,7 +45,17 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Offices/Details/5
+        /// <summary>
+        /// GET: Offices/Details/{id}
+        /// Shows details for a specific office.
+        /// </summary>
+        /// <param name="id">The identifier of the office to display. If null, returns NotFound.</param>
+        /// <returns>
+        /// A task that resolves to an <see cref="IActionResult"/>.
+        /// - Returns <see cref="NotFoundResult"/> when <paramref name="id"/> is null or the office is not found.
+        /// - Returns a view with the office model when found.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -55,14 +78,27 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Offices/Create
+        /// <summary>
+        /// GET: Offices/Create
+        /// Returns the Create view to add a new office.
+        /// </summary>
+        /// <returns>An <see cref="IActionResult"/> that renders the Create view.</returns>
         public IActionResult Create()
         {
             // No DB work here, safe without try/catch
             return View();
         }
 
-        // POST: Offices/Create
+        /// <summary>
+        /// POST: Offices/Create
+        /// Persists a new office when the posted model is valid.
+        /// </summary>
+        /// <param name="office">The <see cref="Office"/> model bound from the request form.</param>
+        /// <returns>
+        /// - Redirects to Index on success.
+        /// - Returns the Create view with validation errors when model state is invalid.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("OfficeID,Name,City,State")] Office office)
@@ -83,7 +119,16 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Offices/Edit/5
+        /// <summary>
+        /// GET: Offices/Edit/{id}
+        /// Loads the Edit view for an office.
+        /// </summary>
+        /// <param name="id">The identifier of the office to edit. If null, returns NotFound.</param>
+        /// <returns>
+        /// - A view populated with the office model when found.
+        /// - NotFound when the id is null or the office does not exist.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -104,7 +149,19 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // POST: Offices/Edit/5
+        /// <summary>
+        /// POST: Offices/Edit/{id}
+        /// Persists changes to an existing office when the posted model is valid.
+        /// </summary>
+        /// <param name="id">The identifier of the office being edited.</param>
+        /// <param name="office">The <see cref="Office"/> model containing updated values.</param>
+        /// <returns>
+        /// - Redirects to Index on successful update.
+        /// - Returns the Edit view with validation messages when model state is invalid.
+        /// - Returns NotFound when the provided id does not match the model id.
+        /// - On concurrency conflict, checks existence and rethrows if necessary.
+        /// - On other exceptions, logs and redirects to Home/Error.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OfficeID,Name,City,State")] Office office)
@@ -135,7 +192,16 @@ namespace LicenseeManager.Controllers
             }
         }
 
-        // GET: Offices/Deactivate/5
+        /// <summary>
+        /// GET: Offices/Deactivate/{id}
+        /// Shows a confirmation page for deactivating an office and optionally reassigning its licensees.
+        /// </summary>
+        /// <param name="id">The identifier of the office to deactivate. If null, returns NotFound.</param>
+        /// <returns>
+        /// - A view populated with the office and a SelectList of other available active offices for reassignment.
+        /// - NotFound when the id is null or the office is not found.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         public async Task<IActionResult> Deactivate(int? id)
         {
             if (id == null)
@@ -164,6 +230,17 @@ namespace LicenseeManager.Controllers
             }
         }
 
+        /// <summary>
+        /// POST: Offices/DeactivateConfirmed
+        /// Deactivates the specified office and optionally reassigns its licensees to another office.
+        /// </summary>
+        /// <param name="id">The identifier of the office to deactivate.</param>
+        /// <param name="newOfficeId">Optional replacement office id to reassign licensees to. If null, licensees are not reassigned.</param>
+        /// <returns>
+        /// - Redirects to Index on success with a TempData message.
+        /// - Returns NotFound when the office cannot be found.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeactivateConfirmed(int id, int? newOfficeId)
@@ -201,6 +278,17 @@ namespace LicenseeManager.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: Offices/Search
+        /// Performs a search and optional sorting over offices and returns a partial view with results.
+        /// </summary>
+        /// <param name="term">Optional search term used to match Name, City or State. Trimmed and ignored if null or whitespace.</param>
+        /// <param name="sortBy">Optional column name to sort by ("Name", "City", "State", "ActiveStatus").</param>
+        /// <param name="sortOrder">Sort order, either "asc" (ascending) or "desc" (descending). Defaults to "asc".</param>
+        /// <returns>
+        /// A <see cref="PartialViewResult"/> rendering "_OfficeTable" populated with the filtered and sorted list of offices.
+        /// On exception, logs and redirects to Home/Error.
+        /// </returns>
         [HttpGet]
         public IActionResult Search(string term, string sortBy, string sortOrder = "asc")
         {
@@ -247,6 +335,16 @@ namespace LicenseeManager.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: Offices/Activate/{id}
+        /// Activates the specified office.
+        /// </summary>
+        /// <param name="id">The identifier of the office to activate.</param>
+        /// <returns>
+        /// - Redirects to Index on success with a TempData success message.
+        /// - Returns NotFound when the office does not exist.
+        /// - On exception, logs and redirects to Home/Error.
+        /// </returns>
         [HttpGet]
         public async Task<IActionResult> Activate(int id)
         {
@@ -269,6 +367,12 @@ namespace LicenseeManager.Controllers
             }
         }
 
+        /// <summary>
+        /// Determines whether an office with the specified id exists.
+        /// </summary>
+        /// <param name="id">The office identifier to check.</param>
+        /// <returns><c>true</c> if the office exists; otherwise <c>false</c>. If an exception occurs while checking,
+        /// logs the error and returns <c>false</c>.</returns>
         private bool OfficeExists(int id)
         {
             try
