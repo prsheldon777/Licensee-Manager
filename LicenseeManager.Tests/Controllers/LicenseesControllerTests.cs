@@ -6,13 +6,28 @@ using LicenseeManager.Tests.TestHelpers;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Xunit;
 
 namespace LicenseeManager.Tests.Controllers
 {
+    /// <summary>
+    /// Unit tests for <see cref="LicenseesController"/>.
+    /// </summary>
+    /// <remarks>
+    /// Tests focus on controller action behavior (Index, Details, Create, Edit) using an in-memory EF Core context.
+    /// Each test follows Arrange / Act / Assert pattern and uses <see cref="InMemoryDbHelper"/> to provide isolated contexts.
+    /// </remarks>
     public class LicenseesControllerTests
     {
-        // Test for Index action
+        /// <summary>
+        /// Verifies that the Index action returns a ViewResult containing the list of licensees.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: seed a license type, office and one licensee into the in-memory context.
+        /// Act: call <see cref="LicenseesController.Index"/>.
+        /// Assert: the result is a view with a single licensee model and expected first name.
+        /// </remarks>
         [Fact]
         public async Task Index_ReturnsView_WithLicensees()
         {
@@ -53,7 +68,14 @@ namespace LicenseeManager.Tests.Controllers
         }
 
 
-        // Test for Details action with invalid ID
+        /// <summary>
+        /// Ensures Details returns NotFoundResult when an invalid/nonexistent id is provided.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: empty in-memory context.
+        /// Act: call <see cref="LicenseesController.Details(int?)"/> with a non-existent id.
+        /// Assert: result is <see cref="NotFoundResult"/>.
+        /// </remarks>
         [Fact]
         public async Task Details_ReturnsNotFound_WhenInvalidId()
         {
@@ -66,7 +88,14 @@ namespace LicenseeManager.Tests.Controllers
         }
 
 
-        // Test for Create action with valid licensee
+        /// <summary>
+        /// Verifies that creating a valid licensee redirects to the Index action and persists the entity.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: in-memory context and a valid <see cref="Licensee"/> instance.
+        /// Act: call <see cref="LicenseesController.Create(Licensee)"/>.
+        /// Assert: result is RedirectToActionResult targeting "Index" and the context contains one licensee.
+        /// </remarks>
         [Fact]
         public async Task Create_ValidLicensee_RedirectsToIndex()
         {
@@ -91,7 +120,14 @@ namespace LicenseeManager.Tests.Controllers
             Assert.Single(context.Licensees);
         }
 
-        // Test for Create action with invalid licensee (missing required fields)
+        /// <summary>
+        /// Confirms that when required fields are missing, Create returns the same view with the model and model state errors.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: controller with invalid model state (missing Email).
+        /// Act: call Create with an invalid licensee.
+        /// Assert: returns ViewResult with the same model and ModelState is invalid.
+        /// </remarks>
         [Fact]
         public async Task Create_MissingRequiredFields_ReturnsSameView()
         {
@@ -118,7 +154,14 @@ namespace LicenseeManager.Tests.Controllers
             Assert.Equal(invalidLicensee, viewResult.Model);
         }
 
-        // Test for Create action with expired licensee
+        /// <summary>
+        /// Verifies that creating a licensee with an expired expiration date returns validation errors and the Create view.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: controller with ModelState simulating expiration date error.
+        /// Act: call Create with an expired licensee.
+        /// Assert: returns ViewResult and ModelState contains the "ExpirationDate" key.
+        /// </remarks>
         [Fact]
         public async Task Create_ExpiredLicensee_ReturnsValidationError()
         {
@@ -150,7 +193,14 @@ namespace LicenseeManager.Tests.Controllers
             Assert.True(controller.ModelState.ContainsKey("ExpirationDate"));
         }
 
-        // Test for Edit action with nonexistent licensee
+        /// <summary>
+        /// Ensures Edit returns NotFound when attempting to edit a licensee that does not exist.
+        /// </summary>
+        /// <remarks>
+        /// Arrange: create a licensee object with a non-existent LicenseeID and call Edit with that id.
+        /// Act: call <see cref="LicenseesController.Edit(int, Licensee)"/>.
+        /// Assert: result is <see cref="NotFoundResult"/>.
+        /// </remarks>
         [Fact]
         public async Task Edit_NonexistentLicensee_ReturnsNotFound()
         {
@@ -178,7 +228,15 @@ namespace LicenseeManager.Tests.Controllers
             Assert.IsType<NotFoundResult>(result);
         }
 
-        // Data-driven test for Create action
+        /// <summary>
+        /// Data-driven test for Create action using test data from <see cref="LicenseeTestData.CreateLicenseeData"/>.
+        /// </summary>
+        /// <param name="input">The input licensee instance to test.</param>
+        /// <param name="expectedSuccess">Whether creation is expected to succeed.</param>
+        /// <remarks>
+        /// Arrange: create context and controller, optionally add model errors to simulate invalid state.
+        /// Act: call Create and assert RedirectToActionResult when expectedSuccess is true, otherwise assert ViewResult and invalid ModelState.
+        /// </remarks>
         [Theory]
         [MemberData(nameof(LicenseeTestData.CreateLicenseeData), MemberType = typeof(LicenseeTestData))]
         public async Task Create_LicenseeDataDriven_ReturnsExpectedResult(Licensee input, bool expectedSuccess)
